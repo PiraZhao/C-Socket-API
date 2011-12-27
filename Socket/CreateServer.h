@@ -15,6 +15,9 @@
 void CreateServer(void * server_opt);
 void StartServer(void * server_opt);
 
-void SendInfo(char * server_name, int port, int tag, char * content);
+// return
+//		0 : success
+//		1 : fail
+int SendInfo(char * server_name, int port, char * content, int len);
 
 #endif

@@ -1,9 +1,25 @@
-﻿生成启动时间为 2011/12/23 14:46:24。
-     1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”在节点 2 上(clean 个目标)。
-     1>_PrepareForClean:
-         正在删除文件“Debug\ClientTest.lastbuildstate”。
-     1>已完成生成项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”(clean 个目标)的操作。
+﻿生成启动时间为 2011/12/27 21:39:45。
+     1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“Debug\ClientTest.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         所有输出均为最新。
+       ManifestResourceCompile:
+         所有输出均为最新。
+       Link:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exe" /INCREMENTAL /NOLOGO WS2_32.lib Socket.lib cstl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ClientTest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib" /MACHINE:X86 Debug\ClientTest.exe.embed.manifest.res
+         Debug\client.obj
+       Manifest:
+         c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\ClientTest.exe.embed.manifest" /manifest Debug\ClientTest.exe.intermediate.manifest
+         所有输出均为最新。
+       LinkEmbedManifest:
+         所有输出均为最新。
+         ClientTest.vcxproj -> C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exe
+       FinalizeBuildStatus:
+         正在删除文件“Debug\ClientTest.unsuccessfulbuild”。
+         正在对“Debug\ClientTest.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”(build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:00.04
+已用时间 00:00:01.21

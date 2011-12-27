@@ -1,6 +1,6 @@
 #include "CreateServer.h"
 
-void MakeUser(User * user, char * content)
+void MakeUser(User * user, char * content, char * addr)
 {
 	// get user name
 	int len = strlen(content);
@@ -12,16 +12,12 @@ void MakeUser(User * user, char * content)
 	// get server addr
 	int j = ++i;
 	while (content[j] != ':' && j<len) j++;	
-	strncpy(user->server_name, &content[i], j-i);
-	user->server_name[j-i] = '\0';
-
-	// get server port
-	int k = ++j;
-	while (content[k] != ':' && k<len) k++;
 	char port[6];
-	strncpy(port, &content[j], k-j);
-	port[k-j] = '\0';
+	strncpy(port, &content[i], j-i);
+	port[j-i] = '\0';
 	user->server_port = atoi(port);
+
+	strcpy(user->server_name, addr);
 }
 
 int ConnectUser(char * content, vector_t * v)
@@ -66,7 +62,7 @@ int ConnectUser(char * content, vector_t * v)
 	return 0;
 }
 
-int TransferData(char * data, vector_t * v)
+int TransferData(char * data, vector_t * v, int length)
 {
 	char user[20];
 	int len = strlen(data);
@@ -83,35 +79,60 @@ int TransferData(char * data, vector_t * v)
 		User u = *(User*)iterator_get_pointer(it);
 		if (strcmp(u.name, user) == 0) {
 			if (u.is_conn == false) return -1;
-			SendInfo(u.conn_server_name, u.conn_server_port, RES_DATA, &data[i]);
+			SendInfo(u.conn_server_name, u.conn_server_port, &data[i], length);
 			break;
 		}
 	}
 	return 0;
 }
 
-void SendInfo(char * server_name, int port, int tag, char * content)
+int SendInfo(char * server_name, int port, char * content, int len)
 {
 	ClientOpt opt;
 	opt.buffer_len = 128;
 	opt.buffer = new char [opt.buffer_len];
 	strcpy(opt.buffer, content);
+	opt.data_len = len;
 	opt.pending = true;
 	opt.runonce = true;
 	opt.remote_port = port;
 	strcpy(opt.server_name, server_name);
 
 	HANDLE h = (HANDLE)_beginthread(CreateClient, 0, &opt);
-	SendRequest(&opt, tag, content);
+	int rst = SendRequest(&opt, content, len);
 	WaitForSingleObject(h, INFINITE);
+	return rst;
+}
+
+void GetAllUsers(ServerOpt * server_opt, char * buff)
+{
+	char status[2];
+	buff[0] = '\0';
+	itoa(RES_ALL_USER, buff, 10);
+	strcat(buff, ":");
+	vector_iterator_t it;
+	for (it = vector_begin(server_opt->user_list);
+		!iterator_equal(it, vector_end(server_opt->user_list));
+		it = iterator_next(it))
+	{
+		User u = *(User*)iterator_get_pointer(it);
+		if (u.is_conn) itoa(1, status, 10);
+		else itoa(0, status, 10);
+		strcat(buff, u.name);
+		strcat(buff, ":");
+		strcat(buff, status);
+		strcat(buff, ",");
+	}
+	strcat(buff, "\0");
 }
 
 void DispatchMsg(
 	int recv_len,
 	char *msg, char *tag, char *content,
 	SOCKET *sock,
+	struct sockaddr_in *addr,
 	ServerOpt * server_opt,
-	void (*SockProc)(SOCKET *sock, int tag, char *content))
+	void (*SockProc)(SOCKET *sock, char *content, int len))
 {
 	int msg_id = ProcessMsg(recv_len, msg, tag, content);
 	printf("Server: tag %s -- content %s\n", tag, content);
@@ -119,23 +140,16 @@ void DispatchMsg(
 	{
 	case ASK_ALL_USER:
 		{
-			vector_iterator_t it;
-			for (it = vector_begin(server_opt->user_list);
-				!iterator_equal(it, vector_end(server_opt->user_list));
-				it = iterator_next(it))
-			{
-				User u = *(User*)iterator_get_pointer(it);
-				printf("%s %s %d %s %s %d\n", 
-					u.name, u.server_name, u.server_port, u.conn_name, u.conn_server_name, u.conn_server_port);
-			}
-			send(*sock, "OK", 3, 0);
+			GetAllUsers(server_opt, content);
+			int length = strlen(content);
+			send(*sock, content, length+1, 0);
 			break;
 		}
 	case ASK_LOGIN:
 		{
 			// name:server_name:port
 			User user;
-			MakeUser(&user, content);
+			MakeUser(&user, content, inet_ntoa(addr->sin_addr));
 			vector_push_back(server_opt->user_list, &user);
 			send(*sock, "ok", 3, 0);
 			break;
@@ -149,19 +163,15 @@ void DispatchMsg(
 		}
 	case ASK_DATA:
 		{
+			// TODO : figure out why it runs out of "switch" after TransferData(...)
 			// content name:data
-			Answer(sock, TRANS_SUCCESS);
-			int ret = TransferData(content, server_opt->user_list);
-			/*	TODO: does not run this segment, why ?
-			if (ret == 0)
-				Answer(sock, TRANS_SUCCESS);
-			else if (ret == -1)
-				Answer(sock, TRANS_FAIL);
-			*/
+			int ret = 1;
+			Answer(sock, (ret==-1?TRANS_FAIL:TRANS_SUCCESS));
+			ret = TransferData(content, server_opt->user_list, recv_len);
 			break;
 		}
 	default:
-		SockProc(sock, msg_id, content);
+		SockProc(sock, content, recv_len);
 	}
 }
 
@@ -268,9 +278,9 @@ void CreateServer(void * opt)
 					FD_CLR(fd_A[i], &fdsr);
 					fd_A[i] = 0;
 				} else {
-					printf("client[%d] send: %s\n", i, Buffer);
+					printf("client[%d] send %d bytes: %s\n", i, retval, Buffer);
 					DispatchMsg(retval, Buffer, tag, content, 
-						(SOCKET*)&fd_A[i], server_opt, server_opt->SockProc);
+						(SOCKET*)&fd_A[i], &client_addr, server_opt, server_opt->SockProc);
 				}
 			}
 		}

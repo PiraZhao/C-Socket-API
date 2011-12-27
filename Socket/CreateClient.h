@@ -20,7 +20,7 @@ void CreateClient(void * client_opt);
  *	0: success
  * -1: fail
  *******************************************/
-int SendRequest(ClientOpt * client_opt, int tag, char * content);
+int SendRequest(ClientOpt * client_opt, char * content, int len);
 
 /************************************** 
  * Start a client

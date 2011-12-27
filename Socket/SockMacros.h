@@ -29,7 +29,7 @@ typedef struct ServerOpt {
 	int port;
 	int buffer_len;
 	vector_t* user_list;
-	void (*SockProc)(SOCKET *sock, int tag, char *content);
+	void (*SockProc)(SOCKET *sock, char *content, int len);
 
 	ServerOpt() {
 		port = 2011;
@@ -65,15 +65,16 @@ typedef struct ClientOpt{
 	bool pending;
 	bool runonce;
 	int buffer_len;
+	int data_len;
 	char * buffer;
-	void (*SocketProc)(SOCKET *sock, int tag, char *content);
+	void (*SocketProc)(SOCKET *sock, char *content, int len);
 
 	ClientOpt() {
 		remote_port = 2011;
 		strcpy(server_name, "localhost");
 		pending = false;
 		runonce = false;
-		buffer_len = 0;
+		buffer_len = data_len = 0;
 		buffer = NULL;
 		SocketProc = NULL;
 	}

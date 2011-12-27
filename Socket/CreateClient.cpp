@@ -69,7 +69,7 @@ void CreateClient(void *opt)
 			//Sleep(500);		// maybe slow down the speed?
 			continue;
 		}
-		retval = send(conn_socket, client_opt->buffer, client_opt->buffer_len, 0);
+		retval = send(conn_socket, client_opt->buffer, client_opt->data_len, 0);
 		if (retval == SOCKET_ERROR) {
 			printf("Client: send() failed with error %d\n", WSAGetLastError());
 			closesocket(conn_socket);
@@ -99,8 +99,7 @@ void CreateClient(void *opt)
 
 		printf("Client: Received %d bytes, data \"%s\"\n", retval, client_opt->buffer);
 		if (client_opt->SocketProc != NULL) {
-			int msg_id = ProcessMsg(retval, client_opt->buffer, tag, content);
-			client_opt->SocketProc(&conn_socket, msg_id, content);
+			client_opt->SocketProc(&conn_socket, client_opt->buffer, retval);
 		}
 
 		if (client_opt->runonce) break;
@@ -127,16 +126,13 @@ HANDLE* StartClient(void * client_opt, void * server_opt)
 	return h;
 }
 
-int SendRequest(ClientOpt * client_opt, int _tag, char * content)
+int SendRequest(ClientOpt * client_opt, char * content, int len)
 {
-	char tag[100];
-	itoa(_tag, tag, 10);
-	if (strlen(tag) + strlen(content) > client_opt->buffer_len)
+	if (len > client_opt->buffer_len) {
+		printf("Failed! You are trying to transfer a too long string.\n");
 		return -1;
-
-	strcpy(client_opt->buffer, tag);
-	strcat(client_opt->buffer, SPLIT);
-	strcat(client_opt->buffer, content);
+	}
+	strcpy(client_opt->buffer, content);
 	client_opt->pending = true;
 
 	return 0;

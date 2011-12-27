@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <CreateServer.h>
 #include <CreateClient.h>
+#include <CommonFunctions.h>
 
-void SockProc(SOCKET *sock, int tag, char *content)
+void SockProc(SOCKET *sock, char *text, int len)
 {
-	switch (tag)
+	char tag[10];
+	char content[100];
+	int msg_id = ProcessMsg(len, text, tag, content);
+	switch (msg_id)
 	{
 	case RES_LOGIN:
 		{
@@ -16,6 +20,12 @@ void SockProc(SOCKET *sock, int tag, char *content)
 	case RES_DATA:
 		{
 			printf("RES_DATA %s\n", content);
+			Answer(sock, TRANS_SUCCESS);
+			break;
+		}
+	case RES_ALL_USER:
+		{
+			printf("RES_ALL_USER %s\n", content);
 			Answer(sock, TRANS_SUCCESS);
 			break;
 		}
@@ -41,11 +51,25 @@ int main(int argc, char *argv[])
 
 	HANDLE * h = StartClient(&copt, &sopt);
 
-	int tag;
-	char content[140];
 	while (1) {
-		scanf("%d %s", &tag, content);
-		SendRequest(&copt, tag, content);
+		int cmd;
+		scanf("%d", &cmd);
+		switch(cmd) {
+		case 1:
+			Login(&copt, argv[3], argv[3]);
+			break;
+		case 2:
+			GetUserList(&copt);
+			break;
+		case 3:
+			ConnectUser(&copt, "2008", "2009");
+			break;
+		case 4:
+			SendData(&copt, argv[3], "hi");
+			break;
+		default:
+			break;
+		}
 	}
 
 	WaitForMultipleObjects(2, h, true, INFINITE);

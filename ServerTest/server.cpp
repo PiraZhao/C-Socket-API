@@ -1,7 +1,7 @@
 #include <CreateClient.h>
 #include <CreateServer.h>
 
-void SockProc(SOCKET * sock, int tag, char * content)
+void SockProc(SOCKET * sock, char * content, int len)
 {
 	printf("------\n");
 }
