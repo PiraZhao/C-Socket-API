@@ -23,7 +23,7 @@ void MakeUser(User * user, char * content, char * addr)
 	strcpy(user->server_name, addr);
 }
 
-int ConnectUser(char * content)
+void ConnectUser(char * content, bool connect)
 {
 	printf("ConnectUser: %s %d\n", content, vector_size(g_UserList));
 
@@ -60,21 +60,39 @@ int ConnectUser(char * content)
 	strcpy(u2.conn_server_name, u1.server_name);
 	u1.conn_server_port = u2.server_port;
 	u2.conn_server_port = u1.server_port;
-	u1.is_conn = u2.is_conn = true;
+	u1.is_conn = u2.is_conn = connect;
 	*(User*)iterator_get_pointer(it_1) = u1;
 	*(User*)iterator_get_pointer(it_2) = u2;
+}
 
-	return 0;
+void DisConnectUser(char * content)
+{
+	char str[100];
+	strcpy(str, content);
+	strcat(str, ":");
+
+	vector_iterator_t it;
+	for (it = vector_begin(g_UserList);
+		!iterator_equal(it, vector_end(g_UserList));
+		it = iterator_next(it))
+	{
+		User u = *(User*)iterator_get_pointer(it);
+		if (strcmp(u.name, content) == 0) {
+			strcat(str, u.conn_name);
+			ConnectUser(str, false);
+			break;
+		}
+	}
 }
 
 int TransferData(char * data, int length)
 {
 	char user[20];
-	int len = strlen(data);
 	int i = 0;
-	while (data[i] != ':' && i < len) i++;
+	while (data[i] != ':' && i < length) i++;
 	strncpy(user, data, i); user[i] = '\0';
 	i++;
+	length -= i;
 
 	vector_iterator_t it;
 	for (it = vector_begin(g_UserList);
@@ -181,7 +199,7 @@ void DispatchMsg(
 	case ASK_INVITE:
 		{
 			// selfname:oppname
-			int ret = ConnectUser(content);
+			ConnectUser(content, true);
 			break;
 		}
 	case ASK_DATA:
@@ -189,7 +207,12 @@ void DispatchMsg(
 			// TODO : figure out why it runs out of "switch" after TransferData(...)
 			// content name:data
 			int ret = 1;
-			ret = TransferData(content, recv_len);
+			ret = TransferData(content, strlen(content)+1);
+			break;
+		}
+	case ASK_EXIT_GAME:
+		{
+			DisConnectUser(content);
 			break;
 		}
 	default:

@@ -12,19 +12,20 @@ extern "C"
 
 #define SPLIT "|||"
 
-#define ASK_REGISTER	0
-#define ASK_LOGIN		1
-#define ASK_LOGOUT		2
-#define ASK_ALL_USER	3
-#define ASK_INVITE		4
-#define ASK_DATA		5
+#define ASK_REGISTER	1000
+#define ASK_LOGIN		1001
+#define ASK_LOGOUT		1002
+#define ASK_ALL_USER	1003
+#define ASK_INVITE		1004
+#define ASK_DATA		1005
+#define ASK_EXIT_GAME	1006
 
-#define RES_REGISTER	10
-#define RES_LOGIN		11
-#define RES_LOGOUT		12
-#define RES_ALL_USER	13
-#define RES_INVITE		14
-#define RES_DATA		15
+#define RES_REGISTER	10010
+#define RES_LOGIN		10011
+#define RES_LOGOUT		10012
+#define RES_ALL_USER	10013
+#define RES_INVITE		10014
+#define RES_DATA		10015
 
 #define TRANS_SUCCESS	"1"
 #define TRANS_FAIL		"0"
@@ -64,7 +65,7 @@ typedef struct User {
 /* Client */
 typedef struct ClientOpt{
 	int remote_port;
-	int local_port;
+	char local_port[10];
 	char user_name[20];
 	char server_name[20];
 	bool pending;
@@ -75,7 +76,8 @@ typedef struct ClientOpt{
 	void (*SocketProc)(char *content, int len);
 
 	ClientOpt() {
-		remote_port = local_port = -1;
+		remote_port = -1;
+		local_port[0] = '\0';
 		strcpy(user_name, "\0");
 		strcpy(server_name, "localhost");
 		pending = false;

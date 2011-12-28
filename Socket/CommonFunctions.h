@@ -15,7 +15,8 @@ extern "C"
 __declspec(dllexport) int ProcessMsg(int recv_len, char *msg, char *tag, char *content);
 __declspec(dllexport) void Answer(SOCKET * sock, char * state);
 
-__declspec(dllexport) int Login(ClientOpt * opt, char * local_port);
+__declspec(dllexport) int Login(ClientOpt * opt);
+__declspec(dllexport) int ExitGame(ClientOpt * opt);
 __declspec(dllexport) int GetUserList(ClientOpt * opt);
 __declspec(dllexport) int ConnectUser(ClientOpt * opt, char * guest_name);
 __declspec(dllexport) int SendData(ClientOpt * opt, char * data);

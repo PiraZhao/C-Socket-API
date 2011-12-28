@@ -25,7 +25,7 @@ void Answer(SOCKET * sock, char * state)
 	send(*sock, state, strlen(state)+1, 0);
 }
 
-int Login(ClientOpt * opt, char * port)
+int Login(ClientOpt * opt)
 {
 	if (opt->pending == true) {
 		printf("Socket is busy now.\n");
@@ -35,10 +35,26 @@ int Login(ClientOpt * opt, char * port)
 	strcat(opt->buffer, "|||");
 	strcat(opt->buffer, opt->user_name);
 	strcat(opt->buffer, ":");
-	strcat(opt->buffer, port);
+	strcat(opt->buffer, &opt->local_port[0]);
 
 	int len = strlen(opt->buffer);
 	opt->data_len = len+1;
+	opt->pending = true;
+
+	return 0;
+}
+
+int ExitGame(ClientOpt * opt)
+{
+	if (opt->pending == true) {
+		printf("Socket is busy now.\n");
+		return -1;
+	}
+	itoa(ASK_EXIT_GAME, opt->buffer, 10);
+	strcat(opt->buffer, "|||");
+	strcat(opt->buffer, opt->user_name);
+
+	opt->data_len = strlen(opt->buffer)+1;
 	opt->pending = true;
 
 	return 0;

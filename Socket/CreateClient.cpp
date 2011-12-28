@@ -128,8 +128,8 @@ HANDLE* StartClient(void * client_opt)
 
 	ServerOpt * server_opt = new ServerOpt;
 	server_opt->buffer_len = c->buffer_len;
-	server_opt->port = c->local_port;
-	printf("lllllllllll %d %d\n", server_opt->port, c->local_port);
+	server_opt->port = atoi(c->local_port);
+	printf("Client: start port remote: %d local: %d\n", server_opt->port, c->local_port);
 	server_opt->SockProc = c->SocketProc;
 
 	h[0] = (HANDLE)_beginthread(StartServer, 0, server_opt);

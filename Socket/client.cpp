@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	copt.remote_port = atoi(argv[1]);
 	strcpy(copt.user_name, argv[3]);
 	strcpy(copt.server_name, argv[2]);
-	copt.local_port = atoi(argv[3]);
+	strcpy(copt.local_port, argv[3]);
 	copt.SocketProc = SockProc;
 
 	HANDLE * h = StartClient(&copt);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 		scanf("%d", &cmd);
 		switch(cmd) {
 		case 1:
-			Login(&copt, argv[3]); // 是否只是登录的时候需要client_port
+			Login(&copt); // 是否只是登录的时候需要client_port
 			break;
 		case 2:
 			GetUserList(&copt);
@@ -62,6 +62,9 @@ int main(int argc, char *argv[])
 			break;
 		case 4:
 			SendData(&copt, "hi");// 为什么要传递第二个参数
+			break;
+		case 5:
+			ExitGame(&copt);
 			break;
 		default:
 			break;
