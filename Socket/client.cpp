@@ -3,7 +3,7 @@
 #include <CreateClient.h>
 #include <CommonFunctions.h>
 
-void SockProc(SOCKET *sock, char *text, int len)
+void SockProc(char *text, int len)
 {
 	char tag[10];
 	char content[100];
@@ -20,17 +20,15 @@ void SockProc(SOCKET *sock, char *text, int len)
 	case RES_DATA:
 		{
 			printf("RES_DATA %s\n", content);
-			Answer(sock, TRANS_SUCCESS);
 			break;
 		}
 	case RES_ALL_USER:
 		{
 			printf("RES_ALL_USER %s\n", content);
-			Answer(sock, TRANS_SUCCESS);
 			break;
 		}
 	default:
-		send(*sock, "hehe", 5, 0);
+		// nothing
 		break;
 	}
 	printf("------------------------\n");
@@ -41,6 +39,7 @@ int main(int argc, char *argv[])
 	ClientOpt copt;
 	copt.buffer_len = 1024;
 	copt.remote_port = atoi(argv[1]);
+	strcpy(copt.user_name, argv[3]);
 	strcpy(copt.server_name, argv[2]);
 	copt.local_port = atoi(argv[3]);
 	copt.SocketProc = SockProc;
@@ -53,16 +52,16 @@ int main(int argc, char *argv[])
 		scanf("%d", &cmd);
 		switch(cmd) {
 		case 1:
-			Login(&copt, argv[3], argv[3]); // 是否只是登录的时候需要client_port
+			Login(&copt, argv[3]); // 是否只是登录的时候需要client_port
 			break;
 		case 2:
 			GetUserList(&copt);
 			break;
 		case 3:
-			ConnectUser(&copt, "2008", "2009");
+			ConnectUser(&copt, "2009");
 			break;
 		case 4:
-			SendData(&copt, argv[3], "hi");// 为什么要传递第二个参数
+			SendData(&copt, "hi");// 为什么要传递第二个参数
 			break;
 		default:
 			break;

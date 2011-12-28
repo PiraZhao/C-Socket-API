@@ -153,8 +153,31 @@ C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+<<<<<<< HEAD
 ^\\vmware-host\Shared Folders\windows share\C-Socket-API\ClientTest\ClientTest.vcxproj
 \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\ClientTest.lib
 \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\ClientTest.lib
 \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\ClientTest.exp
 \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\ClientTest.exp
+=======
+^C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+^C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+^C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+^C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
+>>>>>>> 408ece23e202d3b099822d40c8dd617639f16d87

@@ -16,7 +16,7 @@ int ProcessMsg(int recv_len, char *msg, char *tag, char *content)
 			return atoi(tag);
 		}
 	}
-	printf("ProcessMsg: no SPLIT signal");
+	printf("ProcessMsg: no SPLIT signal.\n");
 	return -1;
 }
 
@@ -25,7 +25,7 @@ void Answer(SOCKET * sock, char * state)
 	send(*sock, state, strlen(state)+1, 0);
 }
 
-int Login(ClientOpt * opt, char * name, char * port)
+int Login(ClientOpt * opt, char * port)
 {
 	if (opt->pending == true) {
 		printf("Socket is busy now.\n");
@@ -33,7 +33,7 @@ int Login(ClientOpt * opt, char * name, char * port)
 	}
 	itoa(ASK_LOGIN, opt->buffer, 10);
 	strcat(opt->buffer, "|||");
-	strcat(opt->buffer, name);
+	strcat(opt->buffer, opt->user_name);
 	strcat(opt->buffer, ":");
 	strcat(opt->buffer, port);
 
@@ -58,7 +58,7 @@ int GetUserList(ClientOpt * opt)
 	return 0;
 }
 
-int ConnectUser(ClientOpt * opt, char * host, char * guest)
+int ConnectUser(ClientOpt * opt, char * guest)
 {
 	if (opt->pending) {
 		printf("Socket is busy now.\n");
@@ -66,7 +66,7 @@ int ConnectUser(ClientOpt * opt, char * host, char * guest)
 	}
 	itoa(ASK_INVITE, opt->buffer, 10);
 	strcat(opt->buffer, "|||");
-	strcat(opt->buffer, host);
+	strcat(opt->buffer, opt->user_name);
 	strcat(opt->buffer, ":");
 	strcat(opt->buffer, guest);
 	opt->data_len = strlen(opt->buffer)+1;
@@ -76,7 +76,7 @@ int ConnectUser(ClientOpt * opt, char * host, char * guest)
 	return 0;
 }
 
-int SendData(ClientOpt * opt, char * host_name, char * data)
+int SendData(ClientOpt * opt, char * data)
 {
 	if (opt->pending) {
 		printf("Socket is busy now.\n");
@@ -84,7 +84,7 @@ int SendData(ClientOpt * opt, char * host_name, char * data)
 	}
 	itoa(ASK_DATA, opt->buffer, 10);
 	strcat(opt->buffer, "|||");
-	strcat(opt->buffer, host_name);
+	strcat(opt->buffer, opt->user_name);
 	strcat(opt->buffer, ":");
 	strcat(opt->buffer, data);
 

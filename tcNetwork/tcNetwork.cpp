@@ -108,39 +108,9 @@ char* fgetstr(FILE *in)//在文件中读取任意长度的字符串(读到回车或空格或括弧或逗号
 	return(str);
 }
 
-void receivePackage(SOCKET *sock, char *data, int length) {
+void receivePackage(char *data, int length) {
 	//stPacketHeader* pPacketHeader = (stPacketHeader*)&incomingPacket[0];
 	//receiveMessage(pPacketHeader->packetID, (char *)(data + sizeof(stPacketHeader)), length - sizeof(stPacketHeader));
-
-	char tag[10];
-	char content[100];
-	int msg_id = ProcessMsg(length, data, tag, content);
-	switch (msg_id)
-	{
-	case RES_LOGIN:
-		{
-			if (strcmp(content, TRANS_SUCCESS) != 0) {
-				// TODO : login failed
-			}
-			break;
-		}
-	case RES_DATA:
-		{
-			printf("RES_DATA %s\n", content);
-			Answer(sock, TRANS_SUCCESS);
-			break;
-		}
-	case RES_ALL_USER:
-		{
-			printf("RES_ALL_USER %s\n", content);
-			Answer(sock, TRANS_SUCCESS);
-			break;
-		}
-	default:
-		send(*sock, "hehe", 5, 0);
-		break;
-	}
-	printf("------------------------\n");
 }
 
 ClientOpt *login(char *user_name) {
@@ -164,15 +134,13 @@ ClientOpt *login(char *user_name) {
 	copt->remote_port = atoi(server_port);
 	strcpy(copt->server_name, server_ip);
 	copt->SocketProc = receivePackage;
+	copt->user_name = user_name;
+	copt->local_port = client_port;
 
-	ServerOpt *sopt = (ServerOpt *)calloc(1, sizeof(ServerOpt));
-	sopt->buffer_len = 1024;
-	sopt->port = atoi(client_port);
-	sopt->SockProc = receivePackage;
 
-	HANDLE * h = StartClient(copt, &sopt);
+	HANDLE * h = StartClient(copt);
 
-	Login(copt, user_name, client_port);
+	Login(copt);
 
 	return copt;
 }
