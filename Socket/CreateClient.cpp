@@ -5,9 +5,6 @@ void CreateClient(void *opt)
 {
 	ClientOpt *client_opt = (ClientOpt*)opt;
 
-	char * tag = new char [client_opt->buffer_len+10];
-	char * content = new char [client_opt->buffer_len+10];
-
 	int retval;
 	struct sockaddr_in server;
 	WSADATA wsaData;
@@ -46,6 +43,8 @@ void CreateClient(void *opt)
 	server.sin_family = hp->h_addrtype;
 	server.sin_port = htons(client_opt->remote_port);
 
+	printf("Client: client send to server %d port %d\n", client_opt->remote_port, server.sin_port);
+
 	conn_socket = socket(AF_INET, SOCK_STREAM, 0);		// protocol here
 	if (conn_socket < 0) {
 		printf("Client: socket() failed with error %d\n", WSAGetLastError());
@@ -66,9 +65,10 @@ void CreateClient(void *opt)
 
 	while (1) {
 		if (!client_opt->pending) {
-			Sleep(500);		// maybe slow down the speed?
+			//Sleep(500);		// maybe slow down the speed?
 			continue;
 		}
+		printf("1\n");
 		retval = send(conn_socket, client_opt->buffer, client_opt->data_len, 0);
 		if (retval == SOCKET_ERROR) {
 			printf("Client: send() failed with error %d\n", WSAGetLastError());
@@ -81,6 +81,11 @@ void CreateClient(void *opt)
 		}
 		printf("Client: Sent data \"%s\"\n", client_opt->buffer);
 
+		/******************************************
+			Client only handles SEND request
+			   DOES NOT handle RECV 
+	     *******************************************/
+		/*
 		retval = recv(conn_socket, client_opt->buffer, client_opt->buffer_len, 0);
 		if (retval == SOCKET_ERROR) {
 			printf("Client: recv() failed with error %d\n", WSAGetLastError());
@@ -101,26 +106,33 @@ void CreateClient(void *opt)
 		if (client_opt->SocketProc != NULL) {
 			client_opt->SocketProc(&conn_socket, client_opt->buffer, retval);
 		}
+		*/
 
 		if (client_opt->runonce) break;
 	}
 	closesocket(conn_socket);
 	WSACleanup();
 
-	delete [] tag;
-	delete [] content;
 	delete [] client_opt->buffer;
 
 	_endthread();
 }
 
-HANDLE* StartClient(void * client_opt, void * server_opt)
+HANDLE* StartClient(void * client_opt)
 {
 	HANDLE h[2];
-	((ClientOpt*)client_opt)->buffer = new char [((ClientOpt*)client_opt)->buffer_len];
-	((ClientOpt*)client_opt)->pending = false;
-	((ClientOpt*)client_opt)->runonce = false;
-	h[0] = (HANDLE)_beginthread(CreateServer, 0, server_opt);
+	ClientOpt * c = (ClientOpt*)client_opt;
+	c->buffer = new char [c->buffer_len];
+	c->pending = false;
+	c->runonce = false;
+
+	ServerOpt * server_opt = new ServerOpt;
+	server_opt->buffer_len = c->buffer_len;
+	server_opt->port = c->local_port;
+	printf("lllllllllll %d %d\n", server_opt->port, c->local_port);
+	server_opt->SockProc = c->SocketProc;
+
+	h[0] = (HANDLE)_beginthread(StartServer, 0, server_opt);
 	h[1] = (HANDLE)_beginthread(CreateClient, 0, client_opt);
 
 	return h;

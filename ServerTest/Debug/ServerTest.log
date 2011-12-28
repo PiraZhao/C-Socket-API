@@ -1,7 +1,7 @@
-﻿生成启动时间为 2011/12/27 21:39:50。
+﻿生成启动时间为 2011/12/28 21:03:00。
      1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ServerTest\ServerTest.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在创建“Debug\ServerTest.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+         正在对“Debug\ServerTest.unsuccessfulbuild”执行 Touch 任务。
        ClCompile:
          所有输出均为最新。
        ManifestResourceCompile:
@@ -9,6 +9,7 @@
        Link:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ServerTest.exe" /INCREMENTAL /NOLOGO WS2_32.lib cstl.lib Socket.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ServerTest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ServerTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ServerTest.lib" /MACHINE:X86 Debug\ServerTest.exe.embed.manifest.res
          Debug\server.obj
+            正在创建库 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ServerTest.lib 和对象 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ServerTest.exp
        Manifest:
          c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\ServerTest.exe.embed.manifest" /manifest Debug\ServerTest.exe.intermediate.manifest
          所有输出均为最新。
@@ -22,4 +23,4 @@
 
 生成成功。
 
-已用时间 00:00:02.38
+已用时间 00:00:01.06

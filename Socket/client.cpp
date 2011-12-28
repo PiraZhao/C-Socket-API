@@ -39,24 +39,21 @@ void SockProc(SOCKET *sock, char *text, int len)
 int main(int argc, char *argv[])
 {
 	ClientOpt copt;
-	copt.buffer_len = 128;
+	copt.buffer_len = 1024;
 	copt.remote_port = atoi(argv[1]);
 	strcpy(copt.server_name, argv[2]);
+	copt.local_port = atoi(argv[3]);
 	copt.SocketProc = SockProc;
 
-	ServerOpt sopt;
-	sopt.buffer_len = 128;
-	sopt.port = atoi(argv[3]);
-	sopt.SockProc = SockProc;
-
-	HANDLE * h = StartClient(&copt, &sopt);
+	HANDLE * h = StartClient(&copt);
 
 	while (1) {
 		int cmd;
+		printf("please enter something\n");
 		scanf("%d", &cmd);
 		switch(cmd) {
 		case 1:
-			Login(&copt, argv[3], argv[3]);
+			Login(&copt, argv[3], argv[3]); // 是否只是登录的时候需要client_port
 			break;
 		case 2:
 			GetUserList(&copt);
@@ -65,7 +62,7 @@ int main(int argc, char *argv[])
 			ConnectUser(&copt, "2008", "2009");
 			break;
 		case 4:
-			SendData(&copt, argv[3], "hi");
+			SendData(&copt, argv[3], "hi");// 为什么要传递第二个参数
 			break;
 		default:
 			break;

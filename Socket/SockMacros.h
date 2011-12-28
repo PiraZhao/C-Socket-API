@@ -1,6 +1,11 @@
 #ifndef __MACROS__H__
 #define __MACROS__H__
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
+
 #include <cstl/cvector.h>
 
 #define MAX_LISTEN 10
@@ -28,13 +33,11 @@
 typedef struct ServerOpt {
 	int port;
 	int buffer_len;
-	vector_t* user_list;
 	void (*SockProc)(SOCKET *sock, char *content, int len);
 
 	ServerOpt() {
 		port = 2011;
 		buffer_len = 128;
-		user_list = NULL;
 		SockProc = NULL;
 	}
 } ServerOpt;
@@ -61,6 +64,7 @@ typedef struct User {
 /* Client */
 typedef struct ClientOpt{
 	int remote_port;
+	int local_port;
 	char server_name[16];
 	bool pending;
 	bool runonce;
@@ -74,11 +78,15 @@ typedef struct ClientOpt{
 		strcpy(server_name, "localhost");
 		pending = false;
 		runonce = false;
-		buffer_len = data_len = 0;
+		buffer_len = 1024;
+		data_len = 0;
 		buffer = NULL;
 		SocketProc = NULL;
 	}
 } ClientOpt;
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
