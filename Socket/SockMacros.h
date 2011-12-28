@@ -1,6 +1,11 @@
 #ifndef __MACROS__H__
 #define __MACROS__H__
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
+
 #include <cstl/cvector.h>
 
 #define MAX_LISTEN 10
@@ -80,5 +85,8 @@ typedef struct ClientOpt{
 	}
 } ClientOpt;
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

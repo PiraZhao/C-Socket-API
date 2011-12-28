@@ -1,0 +1,23 @@
+﻿Build started 2011/12/28 3:50:35.
+Project "\\vmware-host\Shared Folders\windows share\C-Socket-API\tcNetwork\tcNetwork.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating "Debug\tcNetwork.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt tcNetwork.cpp
+  tcNetwork.cpp
+\\vmware-host\shared folders\windows share\c-socket-api\socket\sockmacros.h(79): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+Link:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.exe" /NOLOGO WS2_32.lib Socket.lib cstl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\tcNetwork.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.lib" /MACHINE:X86 Debug\tcNetwork.obj
+  LINK : \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.exe not found or not built by the last incremental link; performing full link
+  tcNetwork.vcxproj -> \\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.exe
+Manifest:
+  c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"\\vmware-host\Shared Folders\windows share\C-Socket-API\Debug\tcNetwork.exe;#1" /manifest Debug\tcNetwork.exe.intermediate.manifest
+FinalizeBuildStatus:
+  Deleting file "Debug\tcNetwork.unsuccessfulbuild".
+  Touching "Debug\tcNetwork.lastbuildstate".
+Done Building Project "\\vmware-host\Shared Folders\windows share\C-Socket-API\tcNetwork\tcNetwork.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.08
