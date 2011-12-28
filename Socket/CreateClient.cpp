@@ -66,7 +66,7 @@ void CreateClient(void *opt)
 
 	while (1) {
 		if (!client_opt->pending) {
-			//Sleep(500);		// maybe slow down the speed?
+			Sleep(500);		// maybe slow down the speed?
 			continue;
 		}
 		retval = send(conn_socket, client_opt->buffer, client_opt->data_len, 0);
