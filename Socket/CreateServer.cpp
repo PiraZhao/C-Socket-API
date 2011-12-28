@@ -1,7 +1,10 @@
 #include "CreateServer.h"
 
+vector_t * g_UserList;
+
 void MakeUser(User * user, char * content, char * addr)
 {
+	printf("MakeUser: user address %s\n", addr);
 	// get user name
 	int len = strlen(content);
 	int i = 0;
@@ -20,8 +23,10 @@ void MakeUser(User * user, char * content, char * addr)
 	strcpy(user->server_name, addr);
 }
 
-int ConnectUser(char * content, vector_t * v)
+int ConnectUser(char * content)
 {
+	printf("ConnectUser: %s %d\n", content, vector_size(g_UserList));
+
 	int len = strlen(content);
 	char user1[20], user2[20];		// names of the two user
 	int i = 0;
@@ -32,8 +37,8 @@ int ConnectUser(char * content, vector_t * v)
 	bool find_one = false;
 
 	vector_iterator_t it, it_1, it_2;
-	for (it = vector_begin(v);
-		!iterator_equal(it, vector_end(v));
+	for (it = vector_begin(g_UserList);
+		!iterator_equal(it, vector_end(g_UserList));
 		it = iterator_next(it))
 	{
 		User u = *(User*)iterator_get_pointer(it);
@@ -62,7 +67,7 @@ int ConnectUser(char * content, vector_t * v)
 	return 0;
 }
 
-int TransferData(char * data, vector_t * v, int length)
+int TransferData(char * data, int length)
 {
 	char user[20];
 	int len = strlen(data);
@@ -72,8 +77,8 @@ int TransferData(char * data, vector_t * v, int length)
 	i++;
 
 	vector_iterator_t it;
-	for (it = vector_begin(v);
-		!iterator_equal(it, vector_end(v));
+	for (it = vector_begin(g_UserList);
+		!iterator_equal(it, vector_end(g_UserList));
 		it = iterator_next(it))
 	{
 		User u = *(User*)iterator_get_pointer(it);
@@ -88,8 +93,9 @@ int TransferData(char * data, vector_t * v, int length)
 
 int SendInfo(char * server_name, int port, char * content, int len)
 {
+	printf("SendInfo : %s %d %s %d\n", server_name, port, content, len);
 	ClientOpt opt;
-	opt.buffer_len = 128;
+	opt.buffer_len = 1024;
 	opt.buffer = new char [opt.buffer_len];
 	strcpy(opt.buffer, content);
 	opt.data_len = len;
@@ -111,8 +117,8 @@ void GetAllUsers(ServerOpt * server_opt, char * buff)
 	itoa(RES_ALL_USER, buff, 10);
 	strcat(buff, ":");
 	vector_iterator_t it;
-	for (it = vector_begin(server_opt->user_list);
-		!iterator_equal(it, vector_end(server_opt->user_list));
+	for (it = vector_begin(g_UserList);
+		!iterator_equal(it, vector_end(g_UserList));
 		it = iterator_next(it))
 	{
 		User u = *(User*)iterator_get_pointer(it);
@@ -124,6 +130,23 @@ void GetAllUsers(ServerOpt * server_opt, char * buff)
 		strcat(buff, ",");
 	}
 	strcat(buff, "\0");
+}
+
+// Get the user who sent request from logged user list
+// return NULL if not found
+User * GetRequestedUser(char * user_address)
+{
+	vector_iterator_t it;
+	for (it = vector_begin(g_UserList);
+		!iterator_equal(it, vector_end(g_UserList));
+		it = iterator_next(it))
+	{
+		User u = *(User*)iterator_get_pointer(it);
+		if (strcmp(u.server_name, user_address) == 0) {
+			return (User*)iterator_get_pointer(it);
+		}
+	}
+	return NULL;
 }
 
 void DispatchMsg(
@@ -141,8 +164,9 @@ void DispatchMsg(
 	case ASK_ALL_USER:
 		{
 			GetAllUsers(server_opt, content);
-			int length = strlen(content);
-			send(*sock, content, length+1, 0);
+			int length = strlen(content) + 1;
+			User * sender = GetRequestedUser(inet_ntoa(addr->sin_addr));
+			SendInfo(sender->server_name, sender->server_port, content, length);
 			break;
 		}
 	case ASK_LOGIN:
@@ -150,14 +174,15 @@ void DispatchMsg(
 			// name:server_name:port
 			User user;
 			MakeUser(&user, content, inet_ntoa(addr->sin_addr));
-			vector_push_back(server_opt->user_list, &user);
-			send(*sock, "ok", 3, 0);
+			vector_push_back(g_UserList, &user);
+			User * sender = GetRequestedUser(inet_ntoa(addr->sin_addr));
+			SendInfo(sender->server_name, sender->server_port, "OK", 3);
 			break;
 		}
 	case ASK_INVITE:
 		{
 			// selfname:oppname
-			int ret = ConnectUser(content, server_opt->user_list);
+			int ret = ConnectUser(content);
 			Answer(sock, TRANS_SUCCESS);
 			break;
 		}
@@ -167,12 +192,13 @@ void DispatchMsg(
 			// content name:data
 			int ret = 1;
 			Answer(sock, (ret==-1?TRANS_FAIL:TRANS_SUCCESS));
-			ret = TransferData(content, server_opt->user_list, recv_len);
+			ret = TransferData(content, recv_len);
 			break;
 		}
 	default:
 		SockProc(sock, content, recv_len);
 	}
+	printf("---------------\n");
 }
 
 int fd_A[MAX_LISTEN];
@@ -222,12 +248,15 @@ void CreateServer(void * opt)
 	server_addr.sin_port = htons(server_opt->port);
 	server_addr.sin_addr.s_addr = INADDR_ANY;
 	memset(server_addr.sin_zero, '\0', sizeof(server_addr));
+	printf("Server: server created from %d port %d\n", server_opt->port, server_addr.sin_port);
 
 	// bind
 	if (bind(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
 		printf("Server: bind() failed with error %d.\n", WSAGetLastError());
 		WSACleanup();
 		exit(1);
+	} else {
+		printf("Server: bind() is OK.\n");
 	}
 
 	// listen : UDP does not need this
@@ -235,6 +264,8 @@ void CreateServer(void * opt)
 		printf("Server: listen() failed with error %d.\n", WSAGetLastError());
 		WSACleanup();
 		exit(1);
+	} else {
+		printf("Server: listen() is OK.\n");
 	}
 
 	fd_set fdsr;
@@ -294,6 +325,7 @@ void CreateServer(void * opt)
 			}
 			if (conn_amount < MAX_LISTEN) {
 				fd_A[conn_amount++] = new_fd;
+				printf("Server: accept () from %s %d\n", inet_ntoa(client_addr.sin_addr), client_addr.sin_port);
 				if (new_fd > maxsock)
 					maxsock = new_fd;
 			} else {
@@ -345,11 +377,11 @@ void StartServer(void *opt)
 {
 	type_register(User, _user_init, _user_copy, _user_less, _user_destroy);
 	ServerOpt * server_opt = (ServerOpt*)opt;
-	server_opt->user_list = create_vector(User);
-	vector_init(server_opt->user_list);
+	g_UserList = create_vector(User);
+	vector_init(g_UserList);
 
 	CreateServer(opt);
 
-	vector_destroy(server_opt->user_list);
+	vector_destroy(g_UserList);
 }
 

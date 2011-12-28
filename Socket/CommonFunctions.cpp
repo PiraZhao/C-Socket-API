@@ -2,12 +2,10 @@
 
 int ProcessMsg(int recv_len, char *msg, char *tag, char *content)
 {
-	printf("ProcessMsg: received message %s\n", msg);
+	printf("ProcessMsg: receive msg %d %s.\n", recv_len, msg);
 	tag[0] = content[0] = '\0';
 	char ch;
-	for (int i=0; i<recv_len; ++i) {
-		if (recv_len-i < strlen(SPLIT))
-			return -1;
+	for (int i=0; i<recv_len-3; ++i) {
 		ch = msg[i];
 		if (msg[i] == '|' && msg[i+1] == '|' && msg[i+2] == '|') {
 			memcpy(tag, msg, i);
@@ -18,6 +16,7 @@ int ProcessMsg(int recv_len, char *msg, char *tag, char *content)
 			return atoi(tag);
 		}
 	}
+	printf("ProcessMsg: no SPLIT signal");
 	return -1;
 }
 
@@ -39,7 +38,7 @@ int Login(ClientOpt * opt, char * name, char * port)
 	strcat(opt->buffer, port);
 
 	int len = strlen(opt->buffer);
-	opt->data_len = len;
+	opt->data_len = len+1;
 	opt->pending = true;
 
 	return 0;
@@ -53,7 +52,7 @@ int GetUserList(ClientOpt * opt)
 	}
 	itoa(ASK_ALL_USER, opt->buffer, 10);
 	strcat(opt->buffer, "|||a");
-	opt->data_len = strlen(opt->buffer);
+	opt->data_len = strlen(opt->buffer)+1;
 	opt->pending = true;
 
 	return 0;
@@ -70,7 +69,7 @@ int ConnectUser(ClientOpt * opt, char * host, char * guest)
 	strcat(opt->buffer, host);
 	strcat(opt->buffer, ":");
 	strcat(opt->buffer, guest);
-	opt->data_len = strlen(opt->buffer);
+	opt->data_len = strlen(opt->buffer)+1;
 
 	opt->pending = true;
 
@@ -89,7 +88,7 @@ int SendData(ClientOpt * opt, char * host_name, char * data)
 	strcat(opt->buffer, ":");
 	strcat(opt->buffer, data);
 
-	opt->data_len = strlen(opt->buffer);
+	opt->data_len = strlen(opt->buffer)+1;
 	opt->pending = true;
 
 	return 0;

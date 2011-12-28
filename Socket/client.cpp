@@ -39,20 +39,17 @@ void SockProc(SOCKET *sock, char *text, int len)
 int main(int argc, char *argv[])
 {
 	ClientOpt copt;
-	copt.buffer_len = 128;
+	copt.buffer_len = 1024;
 	copt.remote_port = atoi(argv[1]);
 	strcpy(copt.server_name, argv[2]);
-	copt.SocketProc = SockProc; // 这个是不是没用？
+	copt.local_port = atoi(argv[3]);
+	copt.SocketProc = SockProc;
 
-	ServerOpt sopt;
-	sopt.buffer_len = 128;
-	sopt.port = atoi(argv[3]);
-	sopt.SockProc = SockProc;
-
-	HANDLE * h = StartClient(&copt, &sopt);
+	HANDLE * h = StartClient(&copt);
 
 	while (1) {
 		int cmd;
+		printf("please enter something\n");
 		scanf("%d", &cmd);
 		switch(cmd) {
 		case 1:

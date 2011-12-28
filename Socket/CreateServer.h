@@ -20,6 +20,7 @@ extern "C"
 __declspec(dllexport) void CreateServer(void * server_opt);
 __declspec(dllexport) void StartServer(void * server_opt);
 
+
 // return
 //		0 : success
 //		1 : fail

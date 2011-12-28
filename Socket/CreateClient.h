@@ -31,7 +31,7 @@ __declspec(dllexport) int SendRequest(ClientOpt * client_opt, char * content, in
  * Start a client
  * Need a client-side server to receive messages from real server.
  ***************************************/
-__declspec(dllexport) HANDLE* StartClient(void * client_opt, void * server_opt);
+__declspec(dllexport) HANDLE* StartClient(void * client_opt);
 
 #ifdef __cplusplus
 }
