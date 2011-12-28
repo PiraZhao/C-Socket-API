@@ -1,7 +1,7 @@
-﻿生成启动时间为 2011/12/28 21:03:04。
+﻿生成启动时间为 2011/12/28 22:17:35。
      1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在创建“Debug\ClientTest.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+         正在对“Debug\ClientTest.unsuccessfulbuild”执行 Touch 任务。
        ClCompile:
          所有输出均为最新。
        ManifestResourceCompile:
@@ -23,4 +23,4 @@
 
 生成成功。
 
-已用时间 00:00:00.96
+已用时间 00:00:01.55

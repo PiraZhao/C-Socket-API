@@ -33,7 +33,7 @@ extern "C"
 typedef struct ServerOpt {
 	int port;
 	int buffer_len;
-	void (*SockProc)(SOCKET *sock, char *content, int len);
+	void (*SockProc)(char *content, int len);
 
 	ServerOpt() {
 		port = 2011;
@@ -65,16 +65,18 @@ typedef struct User {
 typedef struct ClientOpt{
 	int remote_port;
 	int local_port;
-	char server_name[16];
+	char user_name[20];
+	char server_name[20];
 	bool pending;
 	bool runonce;
 	int buffer_len;
 	int data_len;
 	char * buffer;
-	void (*SocketProc)(SOCKET *sock, char *content, int len);
+	void (*SocketProc)(char *content, int len);
 
 	ClientOpt() {
-		remote_port = 2011;
+		remote_port = local_port = -1;
+		strcpy(user_name, "\0");
 		strcpy(server_name, "localhost");
 		pending = false;
 		runonce = false;

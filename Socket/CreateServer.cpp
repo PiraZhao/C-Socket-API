@@ -152,10 +152,9 @@ User * GetRequestedUser(char * user_address)
 void DispatchMsg(
 	int recv_len,
 	char *msg, char *tag, char *content,
-	SOCKET *sock,
 	struct sockaddr_in *addr,
 	ServerOpt * server_opt,
-	void (*SockProc)(SOCKET *sock, char *content, int len))
+	void (*SockProc)(char *content, int len))
 {
 	int msg_id = ProcessMsg(recv_len, msg, tag, content);
 	printf("Server: tag %s -- content %s\n", tag, content);
@@ -183,7 +182,6 @@ void DispatchMsg(
 		{
 			// selfname:oppname
 			int ret = ConnectUser(content);
-			Answer(sock, TRANS_SUCCESS);
 			break;
 		}
 	case ASK_DATA:
@@ -191,12 +189,11 @@ void DispatchMsg(
 			// TODO : figure out why it runs out of "switch" after TransferData(...)
 			// content name:data
 			int ret = 1;
-			Answer(sock, (ret==-1?TRANS_FAIL:TRANS_SUCCESS));
 			ret = TransferData(content, recv_len);
 			break;
 		}
 	default:
-		SockProc(sock, content, recv_len);
+		SockProc(content, recv_len);
 	}
 	printf("---------------\n");
 }
@@ -215,6 +212,8 @@ void CreateServer(void * opt)
 	int yes = 1;
 	int retval;
 	WSADATA wsaData;
+
+	for (int i=0; i<MAX_LISTEN; ++i) fd_A[i] = NULL;
 
 	if ((retval = WSAStartup(0x202, &wsaData)) != 0) {
 		printf("Server: WSAStartup() failed with error %d\n", retval);
@@ -300,8 +299,8 @@ void CreateServer(void * opt)
 			continue;
 		}
 
-		for (int i=0; i<conn_amount; ++i) {
-			if (FD_ISSET(fd_A[i], &fdsr)) {
+		for (int i=0; i<MAX_LISTEN; ++i) {
+			if (fd_A[i] != 0 && FD_ISSET(fd_A[i], &fdsr)) {
 				retval = recv(fd_A[i], Buffer, sizeof(char)*(server_opt->buffer_len), 0);
 				if (retval <= 0) {
 					printf("Server: client[%d] closed\n", i);
@@ -311,7 +310,7 @@ void CreateServer(void * opt)
 				} else {
 					printf("client[%d] send %d bytes: %s\n", i, retval, Buffer);
 					DispatchMsg(retval, Buffer, tag, content, 
-						(SOCKET*)&fd_A[i], &client_addr, server_opt, server_opt->SockProc);
+						&client_addr, server_opt, server_opt->SockProc);
 				}
 			}
 		}
@@ -323,12 +322,17 @@ void CreateServer(void * opt)
 				printf("Server: accept() failed with error %d\n", WSAGetLastError());
 				continue;
 			}
-			if (conn_amount < MAX_LISTEN) {
-				fd_A[conn_amount++] = new_fd;
+			int index = -1;
+			for (int i=0; i<MAX_LISTEN; ++i) {
+				if (fd_A[i] == 0) { index = i; break; }
+			}
+			if (index != -1) {
+				fd_A[index] = new_fd;
 				printf("Server: accept () from %s %d\n", inet_ntoa(client_addr.sin_addr), client_addr.sin_port);
 				if (new_fd > maxsock)
 					maxsock = new_fd;
 			} else {
+				printf("Server: max connections, no more space for new socket\n");
 				send(new_fd, "bye", 4, 0);
 				closesocket(new_fd);
 				break;
@@ -339,6 +343,7 @@ void CreateServer(void * opt)
 	for (int i=0; i<MAX_LISTEN; ++i) {
 		if (fd_A[i] != 0) {
 			closesocket(fd_A[i]);
+			fd_A[i] = 0;
 		}
 	}
 	WSACleanup();

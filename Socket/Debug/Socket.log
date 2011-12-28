@@ -1,4 +1,4 @@
-﻿生成启动时间为 2011/12/28 21:02:29。
+﻿生成启动时间为 2011/12/28 22:11:16。
      1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Socket\Socket.vcxproj”在节点 2 上(build 个目标)。
      1>C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(299,5): warning MSB8004: Output 目录未以斜杠结尾。此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
      1>InitializeBuildStatus:
@@ -6,7 +6,9 @@
        ClCompile:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt CreateServer.cpp
          CreateServer.cpp
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(78): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(79): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(80): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
      1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(12): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(188) : 参见“strncpy”的声明
@@ -48,14 +50,14 @@
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : 参见“strcat”的声明
      1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(132): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(110) : 参见“strcat”的声明
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(329): warning C4018: “>”: 有符号/无符号不匹配
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(363): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(364): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(367): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(332): warning C4018: “>”: 有符号/无符号不匹配
      1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(368): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(369): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(372): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\createserver.cpp(373): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
        Lib:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\\lib\Socket.lib" /NOLOGO Debug\CommonFunctions.obj
@@ -69,4 +71,4 @@
 
 生成成功。
 
-已用时间 00:00:01.35
+已用时间 00:00:01.25
