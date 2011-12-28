@@ -1,7 +1,59 @@
 #include "CreateServer.h"
 
-vector_t * g_UserList;
+vector_t * g_UserList;		// Store all the online users
+int fd_A[MAX_LISTEN];		// Store all the connected sockets
 
+
+/**************************
+	Private functions
+	User who use this DLL should not see these functions
+		Definitions
+****************************/
+void	MakeUser(User * user, char * content, char * addr);
+void	ConnectUser(char * content, bool connect);
+void	DisConnectUser(char * content);
+int		TransferData(char * data, int length);
+int		SendInfo(char * server_name, int port, char * content, int len);
+void	GetAllUsers(ServerOpt * server_opt, char * buff);
+User *	GetRequestedUser(char * user_address);
+// Invoke this when server receives any message
+void	DispatchMsg(
+	int recv_len,
+	char *msg, char *tag, char *content,
+	struct sockaddr_in *addr,
+	ServerOpt * server_opt,
+	void (*SockProc)(char *content, int len));
+// Main function that create a server and runs forever
+void CreateServer(void * opt);
+
+/***************************
+	C-STL : Vector Help Functions
+	Functions help define the "User" structure
+****************************/
+static void _user_init(const void * in, void * out);
+static void _user_copy(const void * first, const void * second, void * out);
+static void _user_less(const void * first, const void * second, void * out);
+static void _user_destroy(const void * in, void * out);
+
+/**************************
+	The important function
+***************************/
+void StartServer(void *opt)
+{
+	type_register(User, _user_init, _user_copy, _user_less, _user_destroy);
+	ServerOpt * server_opt = (ServerOpt*)opt;
+	g_UserList = create_vector(User);
+	vector_init(g_UserList);
+
+	CreateServer(opt);
+
+	vector_destroy(g_UserList);
+}
+
+/******************************
+	Private functions
+		Implementations
+*******************************/
 void MakeUser(User * user, char * content, char * addr)
 {
 	printf("MakeUser: user address %s\n", addr);
@@ -109,25 +161,6 @@ int TransferData(char * data, int length)
 	return 0;
 }
 
-int SendInfo(char * server_name, int port, char * content, int len)
-{
-	printf("SendInfo : %s %d %s %d\n", server_name, port, content, len);
-	ClientOpt opt;
-	opt.buffer_len = 1024;
-	opt.buffer = new char [opt.buffer_len];
-	strcpy(opt.buffer, content);
-	opt.data_len = len;
-	opt.pending = true;
-	opt.runonce = true;
-	opt.remote_port = port;
-	strcpy(opt.server_name, server_name);
-
-	HANDLE h = (HANDLE)_beginthread(CreateClient, 0, &opt);
-	int rst = SendRequest(&opt, content, len);
-	WaitForSingleObject(h, INFINITE);
-	return rst;
-}
-
 void GetAllUsers(ServerOpt * server_opt, char * buff)
 {
 	char status[2];
@@ -221,7 +254,6 @@ void DispatchMsg(
 	printf("---------------\n");
 }
 
-int fd_A[MAX_LISTEN];
 void CreateServer(void * opt)
 {
 	ServerOpt *server_opt = (ServerOpt*) opt;
@@ -377,7 +409,7 @@ void CreateServer(void * opt)
 }
 
 // new type for User
-static void _user_init(const void * in, void * out) 
+static void _user_init(const void * in, void * out)
 {
 	User * u = (User*)in;
 	u->name[0] = u->server_name[0] = u->conn_name[0] = u->conn_server_name[0] = '\0';
@@ -400,16 +432,3 @@ static void _user_copy(const void * first, const void * second, void * out)
 }
 static void _user_less(const void * first, const void * second, void * out) {}
 static void _user_destroy(const void * in, void * out) {}
-
-void StartServer(void *opt)
-{
-	type_register(User, _user_init, _user_copy, _user_less, _user_destroy);
-	ServerOpt * server_opt = (ServerOpt*)opt;
-	g_UserList = create_vector(User);
-	vector_init(g_UserList);
-
-	CreateServer(opt);
-
-	vector_destroy(g_UserList);
-}
-

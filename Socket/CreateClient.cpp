@@ -1,5 +1,28 @@
 #include "CreateClient.h"
 
+// Private Functions
+void CreateClient(void *opt);
+
+// The important function
+HANDLE* StartClient(void * client_opt)
+{
+	HANDLE h[2];
+	ClientOpt * c = (ClientOpt*)client_opt;
+	c->buffer = new char [c->buffer_len];
+	c->pending = false;
+	c->runonce = false;
+
+	ServerOpt * server_opt = new ServerOpt;
+	server_opt->buffer_len = c->buffer_len;
+	server_opt->port = atoi(c->local_port);
+	printf("Client: start port remote: %d local: %d\n", server_opt->port, c->local_port);
+	server_opt->SockProc = c->SocketProc;
+
+	h[0] = (HANDLE)_beginthread(StartServer, 0, server_opt);
+	h[1] = (HANDLE)_beginthread(CreateClient, 0, client_opt);
+
+	return h;
+}
 
 void CreateClient(void *opt)
 {
@@ -116,36 +139,4 @@ void CreateClient(void *opt)
 	delete [] client_opt->buffer;
 
 	_endthread();
-}
-
-HANDLE* StartClient(void * client_opt)
-{
-	HANDLE h[2];
-	ClientOpt * c = (ClientOpt*)client_opt;
-	c->buffer = new char [c->buffer_len];
-	c->pending = false;
-	c->runonce = false;
-
-	ServerOpt * server_opt = new ServerOpt;
-	server_opt->buffer_len = c->buffer_len;
-	server_opt->port = atoi(c->local_port);
-	printf("Client: start port remote: %d local: %d\n", server_opt->port, c->local_port);
-	server_opt->SockProc = c->SocketProc;
-
-	h[0] = (HANDLE)_beginthread(StartServer, 0, server_opt);
-	h[1] = (HANDLE)_beginthread(CreateClient, 0, client_opt);
-
-	return h;
-}
-
-int SendRequest(ClientOpt * client_opt, char * content, int len)
-{
-	if (len > client_opt->buffer_len) {
-		printf("Failed! You are trying to transfer a too long string.\n");
-		return -1;
-	}
-	strcpy(client_opt->buffer, content);
-	client_opt->pending = true;
-
-	return 0;
 }

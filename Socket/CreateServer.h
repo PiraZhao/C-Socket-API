@@ -14,17 +14,10 @@ extern "C"
 
 #include "SockMacros.h"
 #include "CommonFunctions.h"
-#include "CreateClient.h"
+//#include "CreateClient.h"
 
-
-__declspec(dllexport) void CreateServer(void * server_opt);
+// Start a server with the information in the ServerOpt structure
 __declspec(dllexport) void StartServer(void * server_opt);
-
-
-// return
-//		0 : success
-//		1 : fail
-int SendInfo(char * server_name, int port, char * content, int len);
 
 #ifdef __cplusplus
 }

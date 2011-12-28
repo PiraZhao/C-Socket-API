@@ -109,3 +109,22 @@ int SendData(ClientOpt * opt, char * data)
 
 	return 0;
 }
+
+int SendInfo(char * server_name, int port, char * content, int len)
+{
+	printf("SendInfo : %s %d %s %d\n", server_name, port, content, len);
+	ClientOpt opt;
+	opt.buffer_len = 1024;
+	opt.buffer = new char [opt.buffer_len];
+	strcpy(opt.buffer, content);
+	opt.data_len = len;
+	opt.pending = true;
+	opt.runonce = true;
+	opt.remote_port = port;
+	strcpy(opt.server_name, server_name);
+
+	HANDLE h = (HANDLE)_beginthread(CreateClient, 0, &opt);
+	int rst = SendData(&opt, content);
+	WaitForSingleObject(h, INFINITE);
+	return rst;
+}

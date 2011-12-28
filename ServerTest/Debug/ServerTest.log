@@ -1,14 +1,9 @@
-﻿生成启动时间为 2011/12/28 23:35:29。
+﻿生成启动时间为 2011/12/29 0:30:27。
      1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ServerTest\ServerTest.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在创建“Debug\ServerTest.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+         正在对“Debug\ServerTest.unsuccessfulbuild”执行 Touch 任务。
        ClCompile:
-         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt server.cpp
-         server.cpp
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(81): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(82): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
+         所有输出均为最新。
        ManifestResourceCompile:
          所有输出均为最新。
        Link:
@@ -28,4 +23,4 @@
 
 生成成功。
 
-已用时间 00:00:02.72
+已用时间 00:00:00.83

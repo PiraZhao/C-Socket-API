@@ -30,7 +30,11 @@ extern "C"
 #define TRANS_SUCCESS	"1"
 #define TRANS_FAIL		"0"
 
-/* Server */
+/**********************
+	Server structure:
+	  This structure defines some main features 
+	  that a server need to start up.
+************************/
 typedef struct ServerOpt {
 	int port;
 	int buffer_len;
@@ -43,30 +47,15 @@ typedef struct ServerOpt {
 	}
 } ServerOpt;
 
-typedef struct User {
-	char name[20];
-	char server_name[16];
-	int server_port;
-	// opposite's info
-	bool is_conn;
-	char conn_name[20];
-	char conn_server_name[16];
-	int conn_server_port;
-
-	User() {
-		name[0] = server_name[0] = '\0';
-		server_port = -1;
-		is_conn = false;
-		conn_name[0] = conn_server_name[0] = '\0';
-		conn_server_port = -1;
-	}
-} User;
-
-/* Client */
+/***************************
+	Client structure:
+	  This structure is used for the client socket
+	  to send information out to the named server.
+*****************************/		
 typedef struct ClientOpt{
 	int remote_port;
 	char local_port[10];
-	char user_name[20];
+	char user_name[10];
 	char server_name[20];
 	bool pending;
 	bool runonce;
@@ -88,6 +77,35 @@ typedef struct ClientOpt{
 		SocketProc = NULL;
 	}
 } ClientOpt;
+
+
+/*************************
+  User structure:
+	This structure is used by the server to 
+	store all the user information. Including
+	  is the user playing a game?
+	  who is connect to whom?
+**************************/
+typedef struct User {
+	char name[20];
+	char server_name[16];
+	int server_port;
+	// opposite's info
+	bool is_conn;
+	char conn_name[20];
+	char conn_server_name[16];
+	int conn_server_port;
+
+	User() {
+		name[0] = server_name[0] = '\0';
+		server_port = -1;
+		is_conn = false;
+		conn_name[0] = conn_server_name[0] = '\0';
+		conn_server_port = -1;
+	}
+} User;
+
+
 
 #ifdef __cplusplus
 }

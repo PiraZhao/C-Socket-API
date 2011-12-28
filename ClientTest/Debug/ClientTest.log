@@ -1,13 +1,13 @@
-﻿生成启动时间为 2011/12/28 23:35:36。
+﻿生成启动时间为 2011/12/29 0:30:34。
      1>项目“C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\ClientTest\ClientTest.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
-         正在对“Debug\ClientTest.unsuccessfulbuild”执行 Touch 任务。
+         正在创建“Debug\ClientTest.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Socket\client.cpp
          client.cpp
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(81): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(70): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
-     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(82): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\sockmacros.h(71): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
      1>c:\users\zhao\documents\visual studio 2010\projects\socket\socket\client.cpp(42): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  c:\program files\microsoft visual studio 10.0\vc\include\string.h(105) : 参见“strcpy”的声明
@@ -22,7 +22,6 @@
        Link:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exe" /INCREMENTAL /NOLOGO WS2_32.lib Socket.lib cstl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ClientTest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib" /MACHINE:X86 Debug\ClientTest.exe.embed.manifest.res
          Debug\client.obj
-         LINK : 没有找到 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exe 或上一个增量链接没有生成它；正在执行完全链接
             正在创建库 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.lib 和对象 C:\Users\zhao\Documents\Visual Studio 2010\Projects\Socket\Debug\ClientTest.exp
        Manifest:
          c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\ClientTest.exe.embed.manifest" /manifest Debug\ClientTest.exe.intermediate.manifest
@@ -37,4 +36,4 @@
 
 生成成功。
 
-已用时间 00:00:04.36
+已用时间 00:00:02.35
